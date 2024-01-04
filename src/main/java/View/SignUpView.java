@@ -6,6 +6,7 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SignUpView extends JFrame {
@@ -14,58 +15,33 @@ public class SignUpView extends JFrame {
     private JButton signUpButton;
 
     public SignUpView() {
-        initializeUI();
-    }
-
-    private void initializeUI() {
         setTitle("AniApp - Sign Up");
-        setSize(300, 150);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setSize(400, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2));
-
-        JLabel usernameLabel = new JLabel("Username:");
-        JLabel passwordLabel = new JLabel("Password:");
-
+        JPanel panel = new JPanel(new GridLayout(2, 2));
         usernameField = new JTextField();
         passwordField = new JPasswordField();
-
         signUpButton = new JButton("Sign Up");
 
-        panel.add(usernameLabel);
+        panel.add(new JLabel("Username:"));
         panel.add(usernameField);
-        panel.add(passwordLabel);
+        panel.add(new JLabel("Password:"));
         panel.add(passwordField);
-        panel.add(new JLabel()); // Spasi kosong
         panel.add(signUpButton);
 
         add(panel);
     }
 
-    // Mendapatkan nilai username dari field
     public String getUsername() {
         return usernameField.getText();
     }
 
-    // Mendapatkan nilai password dari field
-    public String getPassword() {
-        return new String(passwordField.getPassword());
+    public char[] getPassword() {
+        return passwordField.getPassword();
     }
 
-    // Menambahkan ActionListener untuk tombol sign up
     public void addSignUpListener(ActionListener listener) {
         signUpButton.addActionListener(listener);
-    }
-
-    // Menampilkan pesan sukses
-    public void displaySuccessMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    // Menampilkan pesan kesalahan
-    public void displayErrorMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

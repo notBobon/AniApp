@@ -7,6 +7,7 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenuView extends JFrame {
@@ -14,18 +15,11 @@ public class MainMenuView extends JFrame {
     private JButton exitButton;
 
     public MainMenuView() {
-        initializeUI();
-    }
-
-    private void initializeUI() {
         setTitle("AniApp - Main Menu");
-        setSize(300, 150);
+        setSize(400, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 1));
-
+        JPanel panel = new JPanel(new GridLayout(2, 1));
         startButton = new JButton("Start");
         exitButton = new JButton("Exit");
 
@@ -35,15 +29,11 @@ public class MainMenuView extends JFrame {
         add(panel);
     }
 
-    // Menambahkan ActionListener untuk tombol "Start"
     public void addStartListener(ActionListener listener) {
         startButton.addActionListener(listener);
     }
 
-    // Menambahkan ActionListener untuk tombol "Exit"
     public void addExitListener(ActionListener listener) {
         exitButton.addActionListener(listener);
     }
 }
-
-

@@ -5,56 +5,42 @@
 package Controller;
 
 import Model.UserModel;
+import View.LoginView;
 import View.SignUpView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 public class SignUpController {
     private SignUpView signUpView;
-    private DatabaseManager databaseManager;
+    private UserModel userModel;
 
-    public SignUpController(SignUpView signUpView, DatabaseManager databaseManager) {
+    public SignUpController(SignUpView signUpView, UserModel userModel) {
         this.signUpView = signUpView;
-        this.databaseManager = databaseManager;
+        this.userModel = userModel;
 
-        // Mengatur aksi untuk tombol sign up
-        this.signUpView.addSignUpListener(new SignUpListener());
+        signUpView.addSignUpListener(new SignUpListener());
     }
 
-    // ActionListener untuk tombol sign up
     private class SignUpListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String username = signUpView.getUsername();
-            String password = signUpView.getPassword();
+            char[] password = signUpView.getPassword();
 
-            // Memastikan username tidak kosong
-            if (username.isEmpty()) {
-                signUpView.displayErrorMessage("Username tidak boleh kosong.");
-                return;
-            }
+            // Logika untuk menambahkan pengguna baru (Anda perlu menyesuaikan logika ini sesuai dengan kebutuhan Anda).
+            // Misalnya, menyimpan pengguna baru ke database.
+            userModel.setUsername(username);
+            userModel.setPassword(new String(password));
 
-            // Memastikan password tidak kosong
-            if (password.isEmpty()) {
-                signUpView.displayErrorMessage("Password tidak boleh kosong.");
-                return;
-            }
-
-            // Memastikan username belum digunakan
-            if (databaseManager.isUsernameTaken(username)) {
-                signUpView.displayErrorMessage("Username sudah digunakan. Silakan pilih username lain.");
-                return;
-            }
-
-            // Menambahkan pengguna baru ke database
-            UserModel newUser = new UserModel(username, password);
-            databaseManager.addUser(newUser);
-
-            // Menampilkan pesan sukses dan menutup halaman sign-up
-            signUpView.displaySuccessMessage("Pendaftaran berhasil! Silakan login.");
-            signUpView.dispose();
+            // Tampilkan pesan sukses atau navigasi ke halaman lain.
+            JOptionPane.showMessageDialog(signUpView, "Sign Up successful! You can now log in.");
+            
+            // Pindah ke halaman login atau halaman lain yang sesuai.
+            LoginView loginView = new LoginView();
+            LoginController loginController = new LoginController(loginView, userModel);
+            loginView.setVisible(true);
+            signUpView.dispose(); // Tutup halaman sign-up.
         }
     }
 }
-
-

@@ -4,65 +4,75 @@
  */
 package Controller;
 
-import View.LevelMenuView;
-import View.LevelPageView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LevelPageController {
     private LevelPageView levelPageView;
+    private int level;
 
-    public LevelPageController(LevelPageView levelPageView) {
+    public LevelPageController(LevelPageView levelPageView, int level) {
         this.levelPageView = levelPageView;
+        this.level = level;
 
-        // Mengatur aksi untuk tombol "Back to Menu", "Back", dan "Next"
-        this.levelPageView.addBackToMenuListener(new BackToMenuListener());
-        this.levelPageView.addBackListener(new BackListener());
-        this.levelPageView.addNextListener(new NextListener());
-
-        // Mengatur aksi untuk flip card hewan
-        this.levelPageView.addCardClickListener(new CardClickListener());
+        levelPageView.addBackListener(new BackListener());
+        levelPageView.addNextListener(new NextListener());
+        levelPageView.setLevelLabel("Level " + level);
     }
 
-    // ActionListener untuk tombol "Back to Menu"
-    private class BackToMenuListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Mengatur logika untuk kembali ke Level Menu
-            LevelMenuView levelMenuView = new LevelMenuView();
-            LevelMenuController levelMenuController = new LevelMenuController(levelMenuView);
-            levelMenuView.setVisible(true);
-            levelPageView.dispose(); // Menutup halaman Level Page
-        }
-    }
-
-    // ActionListener untuk tombol "Back"
     private class BackListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Mengatur logika untuk kembali ke hewan sebelumnya
-            levelPageView.showPreviousAnimal();
+            // Logika untuk kembali ke halaman level menu.
+            LevelMenuView levelMenuView = new LevelMenuView();
+            LevelMenuController levelMenuController = new LevelMenuController(levelMenuView);
+            levelMenuView.addBackListener(new BackListener(levelMenuView));
+            levelMenuView.setVisible(true);
+            levelPageView.dispose(); // Tutup halaman level.
         }
     }
 
-    // ActionListener untuk tombol "Next"
     private class NextListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Mengatur logika untuk pindah ke hewan selanjutnya
-            levelPageView.showNextAnimal();
+            // Logika untuk lanjut ke level berikutnya.
+            int nextLevel = level + 1;
+
+            // Contoh: Tampilkan halaman LevelPageView untuk level berikutnya.
+            LevelPageView nextLevelPageView = new LevelPageView(nextLevel);
+            LevelPageController nextLevelPageController = new LevelPageController(nextLevelPageView, nextLevel);
+            nextLevelPageView.addBackListener(new BackListener());
+            nextLevelPageView.addNextListener(new NextListener());
+            nextLevelPageView.setVisible(true);
+            levelPageView.dispose(); // Tutup halaman level sekarang.
         }
     }
 
-    // ActionListener untuk flip card hewan
-    private class CardClickListener implements ActionListener {
+    private class BackListener implements ActionListener {
+        private LevelMenuView levelMenuView;
+
+        public BackListener() {
+        }
+
+        public BackListener(LevelMenuView levelMenuView) {
+            this.levelMenuView = levelMenuView;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Mengatur logika untuk menampilkan informasi lebih detail hewan
-            levelPageView.showDetailedInfo();
+            // Logika untuk kembali ke halaman sebelumnya (level menu atau main menu).
+            if (levelMenuView != null) {
+                levelMenuView.setVisible(true);
+                levelPageView.dispose(); // Tutup halaman level.
+            } else {
+                MainMenuView mainMenuView = new MainMenuView();
+                MainMenuController mainMenuController = new MainMenuController(mainMenuView);
+                mainMenuView.setVisible(true);
+            }
         }
     }
 }
+
 
 
 

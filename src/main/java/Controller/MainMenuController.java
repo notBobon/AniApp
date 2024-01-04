@@ -4,7 +4,6 @@
  */
 package Controller;
 
-import View.LevelMenuView;
 import View.MainMenuView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,29 +14,46 @@ public class MainMenuController {
     public MainMenuController(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
 
-        // Mengatur aksi untuk tombol "Start" dan "Exit"
-        this.mainMenuView.addStartListener(new StartListener());
-        this.mainMenuView.addExitListener(new ExitListener());
+        mainMenuView.addStartListener(new StartListener());
+        mainMenuView.addExitListener(new ExitListener());
     }
 
-    // ActionListener untuk tombol "Start"
     private class StartListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Mengatur logika untuk memulai aplikasi AniApp, misalnya pindah ke halaman Level Menu
+            // Logika untuk pindah ke halaman pemilihan level.
+            // Contoh: Tampilkan halaman LevelMenuView.
             LevelMenuView levelMenuView = new LevelMenuView();
             LevelMenuController levelMenuController = new LevelMenuController(levelMenuView);
+            levelMenuView.addBackListener(new BackListener(levelMenuView, mainMenuView)); // Tambahkan listener back.
             levelMenuView.setVisible(true);
-            mainMenuView.dispose(); // Menutup halaman Main Menu
+            mainMenuView.dispose(); // Tutup halaman main menu.
         }
     }
 
-    // ActionListener untuk tombol "Exit"
     private class ExitListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Mengatur logika untuk keluar dari aplikasi
+            // Logika untuk keluar dari aplikasi.
             System.exit(0);
+        }
+    }
+
+    // Kelas listener tambahan untuk tombol "Back" di halaman level menu.
+    private class BackListener implements ActionListener {
+        private LevelMenuView levelMenuView;
+        private MainMenuView mainMenuView;
+
+        public BackListener(LevelMenuView levelMenuView, MainMenuView mainMenuView) {
+            this.levelMenuView = levelMenuView;
+            this.mainMenuView = mainMenuView;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Logika untuk kembali ke halaman main menu dari halaman level menu.
+            mainMenuView.setVisible(true);
+            levelMenuView.dispose(); // Tutup halaman level menu.
         }
     }
 }
